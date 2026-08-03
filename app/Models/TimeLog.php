@@ -38,14 +38,20 @@ class TimeLog extends Model
     // Formatted "HH:MM:SS" for the Total Time column
     public function getTotalTimeFormattedAttribute(): string
     {
-        if (is_null($this->total_seconds)) {
+        return self::formatSeconds($this->total_seconds);
+    }
+
+    // Reusable formatter, e.g. for the grand-total row under the table
+    public static function formatSeconds(?int $seconds): string
+    {
+        if (is_null($seconds)) {
             return '-';
         }
 
-        $hours = intdiv($this->total_seconds, 3600);
-        $minutes = intdiv($this->total_seconds % 3600, 60);
-        $seconds = $this->total_seconds % 60;
+        $hours = intdiv($seconds, 3600);
+        $minutes = intdiv($seconds % 3600, 60);
+        $secs = $seconds % 60;
 
-        return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+        return sprintf('%02d:%02d:%02d', $hours, $minutes, $secs);
     }
 }

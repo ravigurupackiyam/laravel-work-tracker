@@ -8,18 +8,81 @@
         <div class="glass-card">
             <div class="card-header-gradient p-3 p-md-4 d-flex align-items-center justify-content-between">
                 <h5 class="mb-0"><i class="bi bi-clock-history"></i> Time Log</h5>
-                <span class="badge bg-light text-dark rounded-pill px-3 py-2">{{ $logs->count() }} entries</span>
+                <span class="badge bg-light text-dark rounded-pill px-3 py-2">{{ $logs->total() }} entries</span>
             </div>
             <div class="card-body p-2 p-md-4">
+
+                <!-- Filters -->
+                <form action="{{ route('timelogs.index') }}" method="GET" class="row g-2 g-md-3 mb-4">
+                    <div class="col-6 col-md-3">
+                        <label class="form-label small fw-semibold text-muted mb-1">Work Type</label>
+                        <select name="work_type_id" class="form-select rounded-3">
+                            <option value="">All</option>
+                            @foreach ($workTypes as $type)
+                                <option value="{{ $type->id }}" @selected(($filters['work_type_id'] ?? '') == $type->id)>
+                                    {{ $type->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-6 col-md-3">
+                        <label class="form-label small fw-semibold text-muted mb-1">Description</label>
+                        <input type="text" name="description" value="{{ $filters['description'] ?? '' }}"
+                               class="form-control rounded-3" placeholder="Search...">
+                    </div>
+
+                    <div class="col-4 col-md-2">
+                        <label class="form-label small fw-semibold text-muted mb-1">Day</label>
+                        <select name="day" class="form-select rounded-3">
+                            <option value="">Any</option>
+                            @for ($d = 1; $d <= 31; $d++)
+                                <option value="{{ $d }}" @selected(($filters['day'] ?? '') == $d)>{{ $d }}</option>
+                            @endfor
+                        </select>
+                    </div>
+
+                    <div class="col-4 col-md-2">
+                        <label class="form-label small fw-semibold text-muted mb-1">Month</label>
+                        <select name="month" class="form-select rounded-3">
+                            <option value="">Any</option>
+                            @foreach (['1'=>'Jan','2'=>'Feb','3'=>'Mar','4'=>'Apr','5'=>'May','6'=>'Jun','7'=>'Jul','8'=>'Aug','9'=>'Sep','10'=>'Oct','11'=>'Nov','12'=>'Dec'] as $num => $name)
+                                <option value="{{ $num }}" @selected(($filters['month'] ?? '') == $num)>{{ $name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-4 col-md-2">
+                        <label class="form-label small fw-semibold text-muted mb-1">Year</label>
+                        <select name="year" class="form-select rounded-3">
+                            <option value="">Any</option>
+                            @foreach ($years as $year)
+                                <option value="{{ $year }}" @selected(($filters['year'] ?? '') == $year)>{{ $year }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-12 d-flex gap-2 justify-content-md-end">
+                        <button type="submit" class="btn btn-gradient rounded-pill px-4">
+                            <i class="bi bi-funnel"></i> Filter
+                        </button>
+                        @if (array_filter($filters))
+                            <a href="{{ route('timelogs.index') }}" class="btn btn-outline-secondary rounded-pill px-4">
+                                <i class="bi bi-x-lg"></i> Clear
+                            </a>
+                        @endif
+                    </div>
+                </form>
+
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-head-brand">
                             <tr>
                                 <th>S.No</th>
-                                <th>Date</th>
+                                <th style="min-width: 125px;">Date</th>
                                 <th>Start Time</th>
                                 <th>End Time</th>
-                                <th>Work Type</th>
+                                <th style="min-width: 225px;">Work Type</th>
                                 <th>Description</th>
                                 <th>Total Time</th>
                             </tr>
@@ -27,11 +90,11 @@
                         <tbody>
                             @forelse ($logs as $log)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $log->date->format('d M Y') }}</td>
+                                    <td>{{ $logs->firstItem() + $loop->index }}</td>
+                                    <td style="min-width: 125px;">{{ $log->date->format('d M Y') }}</td>
                                     <td>{{ $log->start_time->format('h:i A') }}</td>
                                     <td>{{ $log->end_time?->format('h:i A') ?? '-' }}</td>
-                                    <td><span class="badge-worktype">{{ $log->workType->name }}</span></td>
+                                    <td style="min-width: 225px;"><span class="badge-worktype">{{ $log->workType->name }}</span></td>
                                     <td class="text-muted">{{ $log->description ?: '-' }}</td>
                                     <td class="fw-semibold">{{ $log->total_time_formatted }}</td>
                                 </tr>
@@ -39,12 +102,25 @@
                                 <tr>
                                     <td colspan="7" class="text-center text-muted py-5">
                                         <i class="bi bi-inbox fs-2 d-block mb-2"></i>
-                                        No time logs yet. Start your first timer below.
+                                        No time logs match these filters.
                                     </td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+
+                @if ($logs->isNotEmpty())
+                    <div class="d-flex justify-content-end mt-3">
+                        <div class="px-4 py-2 rounded-pill" style="background: #f5f3ff;">
+                            <span class="text-muted small fw-semibold me-2">Total Time (filtered):</span>
+                            <span class="fw-bold text-primary">{{ \App\Models\TimeLog::formatSeconds($totalSeconds) }}</span>
+                        </div>
+                    </div>
+                @endif
+
+                <div class="mt-4 d-flex justify-content-center">
+                    {{ $logs->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>

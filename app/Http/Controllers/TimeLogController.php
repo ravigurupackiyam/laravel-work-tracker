@@ -96,4 +96,35 @@ class TimeLogController extends Controller
 
         return response()->json(['message' => 'Timer ended', 'redirect' => route('timelogs.index')]);
     }
+
+    public function manuallyAddShow()
+    {
+        $workTypes = WorkType::orderBy('name')->get();
+        return view('timelogs.manual-add', compact('workTypes'));
+    }
+
+    public function manuallyAdd(Request $request)
+    {
+        $validated = $request->validate([
+            'work_type_id' => ['required', 'exists:work_types,id'],
+            'description' => ['nullable', 'string', 'max:2000'],
+            'start_time' => 'required',
+            'end_time' => 'required',
+        ]);
+
+        $startTime = Carbon::parse($request->start_time);
+        $endTime = Carbon::parse($request->end_time);
+
+        $now = Carbon::now();
+        $timeLog = TimeLog::create([
+            'work_type_id' => $validated['work_type_id'],
+            'description' => $validated['description'] ?? null,
+            'date' => $now->toDateString(),
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'total_seconds' =>  $startTime->diffInSeconds($endTime)
+        ]);
+
+        return redirect()->route('timelogs.index');
+    }
 }

@@ -62,7 +62,8 @@
                         </select>
                     </div>
 
-                    <div class="col-12 d-flex gap-2 justify-content-md-end">
+                    <div class="col-12 d-flex gap-2 justify-content-between">
+                        <a href="{{ route('timelogs.manually') }}" class="btn btn-gradient rounded-pill px-4">Add</a>
                         <button type="submit" class="btn btn-gradient rounded-pill px-4">
                             <i class="bi bi-funnel"></i> Filter
                         </button>

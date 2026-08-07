@@ -38,7 +38,7 @@
                                 <span class="badge-worktype">{{ $type->name }}</span>
                                 <span class="text-muted small ms-2">{{ $type->time_logs_count }} log(s)</span>
                             </div>
-                            <form action="{{ route('worktypes.destroy', $type) }}" method="POST"
+                            <form action="{{ route('worktypes.destroy', $type->id) }}" method="POST"
                                   onsubmit="return confirm('Delete this work type?');">
                                 @csrf
                                 @method('DELETE')

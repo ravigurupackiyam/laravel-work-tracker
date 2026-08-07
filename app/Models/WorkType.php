@@ -2,18 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Support\JsonModel;
 
-class WorkType extends Model
+class WorkType extends JsonModel
 {
-    use HasFactory;
-
-    protected $fillable = ['name'];
-
-    public function timeLogs(): HasMany
-    {
-        return $this->hasMany(TimeLog::class);
-    }
+    protected static string $file = 'work_types.json';
 }

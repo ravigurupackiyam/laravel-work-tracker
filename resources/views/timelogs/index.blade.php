@@ -62,8 +62,7 @@
                         </select>
                     </div>
 
-                    <div class="col-12 d-flex gap-2 justify-content-between">
-                        <a href="{{ route('timelogs.manually') }}" class="btn btn-gradient rounded-pill px-4">Add</a>
+                    <div class="col-12 d-flex gap-2 justify-content-md-end">
                         <button type="submit" class="btn btn-gradient rounded-pill px-4">
                             <i class="bi bi-funnel"></i> Filter
                         </button>
@@ -80,10 +79,10 @@
                         <thead class="table-head-brand">
                             <tr>
                                 <th>S.No</th>
-                                <th style="min-width: 125px;">Date</th>
+                                <th>Date</th>
                                 <th>Start Time</th>
                                 <th>End Time</th>
-                                <th style="min-width: 225px;">Work Type</th>
+                                <th>Work Type</th>
                                 <th>Description</th>
                                 <th>Total Time</th>
                             </tr>
@@ -92,10 +91,10 @@
                             @forelse ($logs as $log)
                                 <tr>
                                     <td>{{ $logs->firstItem() + $loop->index }}</td>
-                                    <td style="min-width: 125px;">{{ $log->date->format('d M Y') }}</td>
+                                    <td>{{ $log->date->format('d M Y') }}</td>
                                     <td>{{ $log->start_time->format('h:i A') }}</td>
                                     <td>{{ $log->end_time?->format('h:i A') ?? '-' }}</td>
-                                    <td style="min-width: 225px;"><span class="badge-worktype">{{ $log->workType->name }}</span></td>
+                                    <td><span class="badge-worktype">{{ $log->workType->name }}</span></td>
                                     <td class="text-muted">{{ $log->description ?: '-' }}</td>
                                     <td class="fw-semibold">{{ $log->total_time_formatted }}</td>
                                 </tr>

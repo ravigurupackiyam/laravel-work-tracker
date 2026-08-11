@@ -79,10 +79,10 @@
                         <thead class="table-head-brand">
                             <tr>
                                 <th>S.No</th>
-                                <th>Date</th>
+                                <th style="min-width: 120px;">Date</th>
                                 <th>Start Time</th>
                                 <th>End Time</th>
-                                <th>Work Type</th>
+                                <th style="min-width: 220px;">Work Type</th>
                                 <th>Description</th>
                                 <th>Total Time</th>
                             </tr>
@@ -91,10 +91,10 @@
                             @forelse ($logs as $log)
                                 <tr>
                                     <td>{{ $logs->firstItem() + $loop->index }}</td>
-                                    <td>{{ $log->date->format('d M Y') }}</td>
+                                    <td style="min-width: 120px;">{{ $log->date->format('d M Y') }}</td>
                                     <td>{{ $log->start_time->format('h:i A') }}</td>
                                     <td>{{ $log->end_time?->format('h:i A') ?? '-' }}</td>
-                                    <td><span class="badge-worktype">{{ $log->workType->name }}</span></td>
+                                    <td style="min-width: 220px;"><span class="badge-worktype">{{ $log->workType->name }}</span></td>
                                     <td class="text-muted">{{ $log->description ?: '-' }}</td>
                                     <td class="fw-semibold">{{ $log->total_time_formatted }}</td>
                                 </tr>

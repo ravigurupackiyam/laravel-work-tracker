@@ -129,9 +129,9 @@
                 <i class="bi bi-stopwatch-fill"></i> Work Timer
             </a>
             <div class="ms-auto d-flex align-items-center gap-2">
-                <button id="pwa-install-btn" class="btn btn-gradient btn-sm rounded-pill px-3 d-none">
+                {{-- <button id="pwa-install-btn" class="btn btn-gradient btn-sm rounded-pill px-3 d-none">
                     <i class="bi bi-download"></i> Install App
-                </button>
+                </button> --}}
                 <a href="{{ route('worktypes.index') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
                     <i class="bi bi-tags"></i> Manage Work Types
                 </a>
